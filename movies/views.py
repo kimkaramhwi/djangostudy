@@ -15,12 +15,12 @@ class ActorsView(View):
             movies      = actor.movies.all()
             for movie in movies:
                 movie_lists.append({
-                    "movie_title" : movie.title
+                    "title" : movie.title
                 })
             results.append({
                 "first_name" : actor.first_name,
                 "last_name" : actor.last_name,
-                "title" : movie_lists
+                "movie" : movie_lists
             })
 
         return JsonResponse({'resutls':results}, status=200)
@@ -34,13 +34,13 @@ class MoviesView(View):
             actors      = movie.actor_set.all()
             for actor in actors:
                 actor_lists.append({
-                    "actor_name" : actor.first_name
+                    "name" : actor.first_name
                 })
             results.append(
                 {
                    "title" : movie.title,
                    "running_time" : movie.running_time,
-                   "first_name" : actor_lists
+                   "actor" : actor_lists
                 }
             )
        

@@ -7,15 +7,19 @@ from owners.models import Owner, Dog
 
 class OwnersView(View):
     def post(self, request):
-        # Json -> dictionary
-        data      = json.loads(request.body)
-        Owner.objects.create(
-            id    = data['id'],
-            name  = data['name'],
-            email = data['email'],
-            age   = data['age']
-        )
-        return JsonResponse({'messasge':'created'}, status=201)
+        try:
+            # Json -> dictionary
+            data      = json.loads(request.body)
+            Owner.objects.create(
+                id    = data['id'],
+                name  = data['name'],
+                email = data['email'],
+                age   = data['age']
+            )
+            return JsonResponse({'messasge':'created'}, status=201)
+        except KeyError:
+            return JsonResponse({'messasge':'Keyerror'}, status=400)
+
 
     def get(self, request):
         owners = Owner.objects.all()

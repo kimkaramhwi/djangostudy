@@ -59,17 +59,23 @@ class DogsView(View):
 
 class OwnersDogsView(View):
     def get(self, request):
-        dogs = Dog.objects.all()
+        owners = Owner.objects.all()
         results  = []
 
-        for dog in dogs:
-           results.append(
+        for owner in owners:
+            dog_list = []
+            dogs = owner.dog_set.all()
+            for dog in dogs:
+                dog_list.append({
+                    "name" : dog.name,
+                    "age" : dog.age
+                })
+            results.append(
                 {
-                   "name" : Owner.objects.get(id=dog.owner_id).name,
-                   "email" : Owner.objects.get(id=dog.owner_id).email,
-                   "age" : Owner.objects.get(id=dog.owner_id).age,
-                   "dog_name" : dog.name,
-                   "dog_age" : dog.age
+                   "name" : owner.name,
+                   "email" : owner.email,
+                   "age" : owner.age,
+                   "dog" : dog_list
                 }
             )
        

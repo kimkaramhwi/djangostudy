@@ -1,6 +1,3 @@
-import json
-from unittest import result
-
 from django.http  import JsonResponse
 from django.views import View
 
@@ -14,7 +11,8 @@ class ActorsView(View):
             movie_lists = [] # movie를 담을 리스트 생성
             movies      = actor.movies.all() # MTM관계 지정을 했으므로 중간 테이블없이 movies 값을 가져올 수 있다.
             for movie in movies: # movie테이블의 모든 레코드를 돈다.
-                movie_lists.append({ # 영화 제목을 영화 리스트에 추가한다.
+                # 각 actor에 맞는 movie리스트를 추가한다.
+                movie_lists.append({ 
                     "title" : movie.title # 영화 제목을 가져온다.
                 })
             results.append({ # 배우의 이름, 영화 목록을 추가한다.
@@ -31,12 +29,15 @@ class MoviesView(View):
         results  = []
         for movie in movies:
             actor_lists = [] # actor를 담을 리스트 생성
+            # movies안의 각각의 movie에 맞는 actors객체를 전부 가져온다.
+            # MTM을 사용하지 않는다면 중간테이블에서 값을 가져와야한다.
             actors      = movie.actor_set.all() # movie에서 actor 참조는 역참조이다.
-            for actor in actors:
-                actor_lists.append({
+            for actor in actors: # actor테이블의 모든 레코드를 돈다.
+                # 각 movie에 맞는 actor리스트를 추가한다.
+                actor_lists.append({ 
                     "name" : actor.first_name
                 })
-            results.append(
+            results.append( # 영화의 제목, 러닝타임, 배우 목록을 추가한다.
                 {
                    "title" : movie.title,
                    "running_time" : movie.running_time,
